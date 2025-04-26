@@ -1,0 +1,16 @@
+/* Custom admin styles for WordPlug plugin */
+.mdc-data-table__cell, .mdc-data-table__header-cell {
+  padding: 8px 16px;
+}
+
+.wordplug-admin-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.mdc-switch {
+  margin-left: 8px;
+}
