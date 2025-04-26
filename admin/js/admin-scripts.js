@@ -5,33 +5,6 @@
 // Production-ready: no debug alerts or highlights
 // Add your real event listeners and logic for the admin buttons below
 
-document.addEventListener('DOMContentLoaded', function () {
-    'use strict';
-
-    // Example: Add Text Field button
-    var addTextFieldBtn = document.getElementById('add-text-field-button');
-    if (addTextFieldBtn) {
-        addTextFieldBtn.addEventListener('click', function () {
-            // TODO: Add your logic for adding a text field
-        });
-    }
-
-    // Example: Add Media Field button
-    var addMediaFieldBtn = document.getElementById('add-media-field-button');
-    if (addMediaFieldBtn) {
-        addMediaFieldBtn.addEventListener('click', function () {
-            // TODO: Add your logic for adding a media field
-        });
-    }
-
-    // Example: Add Toggle Switch button
-    var addToggleSwitchBtn = document.getElementById('add-toggle-switch-button');
-    if (addToggleSwitchBtn) {
-        addToggleSwitchBtn.addEventListener('click', function () {
-            // TODO: Add your logic for adding a toggle switch
-        });
-    }
-});
 console.log('JS loaded: admin-scripts.js');
 // --- WordPlug Custom Feeds Admin Scripts ---
 document.addEventListener('DOMContentLoaded', function () {
@@ -39,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const feedConfigContainer = document.getElementById('feed-config-container');
     if (!feedConfigContainer) {
-        console.error('[WordPlug] feed-config-container NOT FOUND. JS will not attach listeners.');
+        // Not present on this page (e.g., feed list) — skip attaching listeners.
         return;
     }
     console.log('[WordPlug] feed-config-container found. Attaching listeners.');
@@ -367,21 +340,20 @@ function addToggleSwitch() {
 
     // --- General Functions ---
 
-    /**
-     * Removes a feed configuration item (text, media, or toggle).
-     * @param {Event} e - The click event object from the delegated listener.
-     */
     function removeItem(e) {
-        // The button is the target of the delegated event listener
-        const targetButton = e.target.closest('.remove-feed-item-button'); // The actual button clicked
-        if (!targetButton) return; // Click wasn't on a remove button or its child
-
+        const targetButton = e.target.closest('.remove-feed-item-button');
+        if (!targetButton) {
+            console.warn('[WordPlug] removeItem: No .remove-feed-item-button found from event target', e.target);
+            return;
+        }
         const itemToRemove = targetButton.closest('.feed-config-item');
-        if (!itemToRemove) return;
-
+        if (!itemToRemove) {
+            console.warn('[WordPlug] removeItem: No .feed-config-item ancestor found for remove button', targetButton);
+            return;
+        }
         const listContainer = itemToRemove.parentElement;
+        console.log('[WordPlug] Removing item:', itemToRemove, 'from container:', listContainer);
         itemToRemove.remove();
-
         // Add placeholder back if list becomes empty
         if (listContainer) {
             if (listContainer.id === 'text-fields-list') {
@@ -394,24 +366,14 @@ function addToggleSwitch() {
         }
     }
 
-    // --- Event Listeners ---
-
-    // Attach listeners to Add buttons if they exist
-    if (addTextFieldButton) {
-        addTextFieldButton.addEventListener('click', addTextField);
-    }
-    if (addMediaFieldButton) {
-        addMediaFieldButton.addEventListener('click', addMediaField);
-    }
-    if (addToggleSwitchButton) {
-        addToggleSwitchButton.addEventListener('click', addToggleSwitch);
-    }
-
     // Use event delegation for remove buttons and media buttons on the container
     // This handles clicks on items present initially or added later
     feedConfigContainer.addEventListener('click', function (e) {
+        console.log('[WordPlug] feedConfigContainer click handler fired', e.target);
         // Handle Remove Button clicks
-        if (e.target.closest('.remove-feed-item-button')) {
+        const removeBtn = e.target.closest('.remove-feed-item-button');
+        if (removeBtn) {
+            console.log('[WordPlug] Remove button clicked', removeBtn);
             removeItem(e);
         }
         // Handle Select Media Button clicks

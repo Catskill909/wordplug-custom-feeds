@@ -1,5 +1,34 @@
 # WordPress Custom REST API Feed Plugin Plan
 
+---
+
+## 📝 Work Log & Feature Status (as of 2025-04-25)
+
+### Current Status
+- **Text Field Creation:** Works fine. Fields can be added and saved.
+- **Delete Button:** Present, but does nothing (needs implementation).
+- **Media Field:**
+    - Cannot choose any WordPress media (media uploader not working).
+    - Media button does nothing (needs implementation).
+- **Toggle Field:**
+    - UI present, but not functional as a true toggle.
+    - Should be a visual on/off toggle (MDC Switch or similar) and allow a field title.
+    - Value should be 'on' or 'off'.
+
+### To-Do List / Next Dev Steps
+- [ ] Fix: The edit screen currently traps the user until they save. Improve the edit flow so users can easily navigate back to the main admin view without saving, or consider merging edit and list views for better UX. (New development task)
+- [ ] Fix: The edit button for created feeds does not bring up saved content in the admin UI. The JSON feed is correct, but there is currently no way to edit existing feeds from the admin interface.
+- [ ] Implement delete functionality for fields (delete button should remove the field row from UI and config).
+- [ ] Implement WordPress Media Uploader integration for media fields (button should open media library, allow selection, and save URL/ID).
+- [ ] Implement a visual toggle (on/off) for toggle fields using MDC Switch, and allow assigning a field title.
+- [ ] Ensure all field types (text, media, toggle) can be added, edited, and deleted dynamically.
+- [ ] Polish UI for better usability and feedback (error/success messages, loading states, etc).
+- [ ] Test saving and loading of all field types in feed config meta.
+- [ ] REST API: Ensure output JSON matches structure and includes all field types and values.
+- [ ] Update documentation and help text in the admin UI as features are completed.
+
+---
+
 **Project Goal:** Create a WordPress plugin allowing administrators to define custom REST API endpoints (feeds). Each feed will output configurable text fields, media library URLs, and toggle switch states in a structured JSON format. The admin interface will use Material Components for the Web (MDC Web) for styling and provide a list of created feeds with clickable endpoint URLs.
 
 **Key Decisions:**
