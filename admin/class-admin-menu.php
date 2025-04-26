@@ -183,12 +183,31 @@ class WordPlug_CF_Admin_Menu
             return;
         }
 
+        // Always enqueue WordPress media uploader scripts
+        if (function_exists('wp_enqueue_media')) {
+            wp_enqueue_media();
+        }
+        // Enqueue MDC Web CSS and JS from CDN
+        wp_enqueue_style(
+            'mdc-web',
+            'https://unpkg.com/material-components-web@14.0.0/dist/material-components-web.min.css',
+            array(),
+            '14.0.0'
+        );
+        wp_enqueue_script(
+            'mdc-web',
+            'https://unpkg.com/material-components-web@14.0.0/dist/material-components-web.min.js',
+            array(),
+            '14.0.0',
+            true
+        );
+        // Enqueue plugin admin JS, making mdc-web a dependency
         wp_enqueue_script(
             'wordplug-admin-scripts',
             plugins_url('admin/js/admin-scripts.js', WORDPLUG_CF_PLUGIN_FILE),
-            array(), // Add 'jquery' here if needed
+            array('mdc-web'),
             '1.0.0',
-            true // Load in footer
+            true
         );
     }
 
