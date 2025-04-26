@@ -49,27 +49,36 @@ class WordPlug_CF_Admin_Menu
     /**
      * Adds the main menu page.
      */
+    /**
+     * Registers the main admin menu and a hidden submenu for the Custom Feeds plugin.
+     *
+     * - The main menu is visible in the WordPress admin sidebar and links to the feed list page.
+     * - The hidden submenu is used for the Add/Edit Feed page, allowing direct navigation/editing without cluttering the menu.
+     *
+     * @since 1.0.0
+     */
     public function add_admin_menu()
     {
+        // Register the main menu page for Custom Feeds
         add_menu_page(
             __('Custom Feeds', WORDPLUG_CF_TEXT_DOMAIN), // Page Title
             __('Custom Feeds', WORDPLUG_CF_TEXT_DOMAIN), // Menu Title
-            $this->capability,                             // Capability
-            $this->main_menu_slug,                         // Menu Slug
-            array($this, 'render_list_page'),            // Callback function
-            'dashicons-rss',                               // Icon URL
-            25                                             // Position
+            $this->capability,                           // Required capability
+            $this->main_menu_slug,                       // Menu Slug
+            array($this, 'render_list_page'),            // Callback function to render the feed list
+            'dashicons-rss',                             // Icon (WordPress Dashicon)
+            25                                           // Position in the admin menu
         );
 
-        // Add hidden submenu page for Adding/Editing feeds
-        // This allows us to use a consistent slug for both actions
+        // Register a hidden submenu page for Add/Edit Feed (not shown in sidebar)
+        // This enables direct access to the edit page without cluttering the admin menu
         add_submenu_page(
-            null, // Parent slug - null hides it from menu
-            __('Add/Edit Feed', WORDPLUG_CF_TEXT_DOMAIN), // Page Title (doesn't show in menu)
+            null, // Parent slug - null hides it from the sidebar
+            __('Add/Edit Feed', WORDPLUG_CF_TEXT_DOMAIN), // Page Title (for browser, not menu)
             __('Add/Edit Feed', WORDPLUG_CF_TEXT_DOMAIN), // Menu Title (doesn't show)
-            $this->capability,
-            $this->main_menu_slug . '-edit', // Submenu slug (e.g., wordplug-custom-feeds-edit)
-            array($this, 'render_edit_page') // Callback function
+            $this->capability,                            // Required capability
+            $this->main_menu_slug . '-edit',              // Submenu slug (e.g., wordplug-custom-feeds-edit)
+            array($this, 'render_edit_page')              // Callback function for the edit page
         );
     }
 
@@ -135,12 +144,14 @@ class WordPlug_CF_Admin_Menu
                 }
                 $feed_title = $feed_post->post_title;
                 $feed_config_raw = get_post_meta($feed_id, '_feed_config', true);
-                // Ensure config is an array and has expected keys, sanitize if necessary (though should be sanitized on save)
-                if (is_array($feed_config_raw)) {
-                    $feed_config['text_fields'] = isset($feed_config_raw['text_fields']) && is_array($feed_config_raw['text_fields']) ? $feed_config_raw['text_fields'] : array();
-                    $feed_config['media_fields'] = isset($feed_config_raw['media_fields']) && is_array($feed_config_raw['media_fields']) ? $feed_config_raw['media_fields'] : array();
-                    $feed_config['toggles'] = isset($feed_config_raw['toggles']) && is_array($feed_config_raw['toggles']) ? $feed_config_raw['toggles'] : array();
+                // Defensive: ensure config is always an array
+                if (!is_array($feed_config_raw)) {
+                    $feed_config_raw = array();
                 }
+                // Ensure config has expected keys
+                $feed_config['text_fields'] = isset($feed_config_raw['text_fields']) && is_array($feed_config_raw['text_fields']) ? $feed_config_raw['text_fields'] : array();
+                $feed_config['media_fields'] = isset($feed_config_raw['media_fields']) && is_array($feed_config_raw['media_fields']) ? $feed_config_raw['media_fields'] : array();
+                $feed_config['toggles'] = isset($feed_config_raw['toggles']) && is_array($feed_config_raw['toggles']) ? $feed_config_raw['toggles'] : array();
             } else {
                 // Invalid feed_id provided, treat as Add New or show error
                 $is_editing = false;
@@ -231,6 +242,16 @@ class WordPlug_CF_Admin_Menu
         $feed_title = isset($_POST['feed_title']) ? sanitize_text_field(wp_unslash($_POST['feed_title'])) : '';
         $feed_config_raw = isset($_POST['feed_config']) ? wp_unslash($_POST['feed_config']) : array(); // Expecting an array: ['text_fields'=>[], 'media_fields'=>[], 'toggles'=>[]]
 
+        // Defensive: ensure config is always an array
+        if (!is_array($feed_config_raw)) {
+            $feed_config_raw = array();
+        }
+
+        // Debug: log incoming config for troubleshooting
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log('[WordPlug] handle_save_feed() - Incoming config: ' . print_r($feed_config_raw, true));
+        }
+
         // Basic validation
         if (empty($feed_title)) {
             // Redirect back with error (or handle more gracefully)
@@ -265,6 +286,10 @@ class WordPlug_CF_Admin_Menu
         // 5. Sanitize and Save Feed Configuration Meta (Example: saving the raw structure)
         // You might want more specific sanitization based on expected keys/values
         $sanitized_config = $this->sanitize_feed_config($feed_config_raw);
+        // Debug: log sanitized config for troubleshooting
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log('[WordPlug] handle_save_feed() - Sanitized config to be saved: ' . print_r($sanitized_config, true));
+        }
         update_post_meta($feed_id, '_feed_config', $sanitized_config);
 
         // 6. Redirect on Success

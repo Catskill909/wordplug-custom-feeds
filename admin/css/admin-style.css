@@ -1,0 +1,171 @@
+.feed-title-wrapper {
+  max-width: 440px;
+  min-width: 260px;
+  margin-bottom: 24px;
+}
+@media (max-width: 600px) {
+  .feed-title-wrapper {
+    max-width: 100%;
+    min-width: 0;
+  }
+  .add-feed-btn-row {
+    margin-bottom: 20px;
+  }
+  .add-feed-btn {
+    width: 100%;
+    min-width: 0;
+    font-size: 1rem;
+    padding: 0 10px;
+    height: 40px;
+  }
+}
+
+.add-feed-btn-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.add-feed-btn {
+  background: var(--mdc-theme-primary, #6200ee);
+  color: #fff;
+  font-weight: 500;
+  border-radius: 4px;
+  box-shadow: var(--mdc-elevation--z2, 0px 2px 4px rgba(60,60,60,0.07));
+  transition: box-shadow 0.2s;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  padding: 0 28px;
+  height: 44px;
+  text-transform: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-feed-btn:hover, .add-feed-btn:focus {
+  box-shadow: var(--mdc-elevation--z4, 0px 4px 8px rgba(60,60,60,0.13));
+  background: var(--mdc-theme-primary-dark, #3700b3);
+  color: #fff;
+}
+
+/* Material Design Card for Edit Sections */
+.feed-edit-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: var(--mdc-elevation--z1, 0px 1px 3px rgba(60,60,60,0.07));
+  border: 1px solid #e0e0e0;
+  margin-bottom: 32px;
+  padding: 0;
+}
+.feed-edit-card .mdc-card__content {
+  padding: 32px 24px 24px 24px;
+}
+
+.feed-edit-section-header {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: #222;
+  letter-spacing: 0.01em;
+}
+
+.feed-edit-section-desc {
+  color: #666;
+  margin-bottom: 18px;
+}
+
+.feed-config-section {
+  margin-bottom: 28px;
+}
+
+/* Snackbar for feedback */
+.mdc-snackbar {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 1000;
+  min-width: 320px;
+  max-width: 480px;
+  background: #323232;
+  color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+  display: none;
+}
+.mdc-snackbar--open {
+  display: flex;
+  align-items: center;
+  animation: snackbar-in 0.2s;
+}
+@keyframes snackbar-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.mdc-snackbar__label {
+  flex: 1;
+  font-size: 1rem;
+  padding: 16px 24px;
+}
+.mdc-snackbar__actions {
+  margin-right: 12px;
+}
+
+/* Flex layout for dynamic field lists */
+#feed-config-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+#text-fields-list, #media-fields-list, #toggle-switches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feed-config-item {
+  background: #fafafa;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.remove-feed-item-button {
+  --mdc-theme-primary: #d32f2f !important;
+  color: #d32f2f !important;
+  margin-top: 8px;
+  align-self: flex-end;
+}
+
+.no-items-placeholder {
+  color: #999;
+  font-style: italic;
+  margin: 0 0 8px 0;
+}
+
+@media (max-width: 600px) {
+  .feed-title-wrapper {
+    max-width: 100%;
+    min-width: 0;
+  }
+  .add-feed-btn-row {
+    margin-bottom: 20px;
+  }
+  .add-feed-btn {
+    width: 100%;
+    min-width: 0;
+    font-size: 1rem;
+    padding: 0 10px;
+    height: 40px;
+  }
+  .feed-edit-card .mdc-card__content {
+    padding: 18px 8px 12px 8px;
+  }
+}

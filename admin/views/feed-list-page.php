@@ -23,11 +23,17 @@ if (! current_user_can('manage_options')) { // Assuming 'manage_options' capabil
 
     <p><?php echo esc_html__('This page will list all created custom feeds.', WORDPLUG_CF_TEXT_DOMAIN); ?></p>
 
-    <!-- Add New button will go here -->
-    <a href="<?php echo esc_url(admin_url('admin.php?page=' . $main_menu_slug . '-edit')); // Link to the hidden Add/Edit page using the passed slug variable
-                ?>" class="page-title-action">
-        <?php echo esc_html__('Add New Feed', WORDPLUG_CF_TEXT_DOMAIN); ?>
-    </a>
+    <!-- Add New Feed Button (Modern Material Design) -->
+    <div class="add-feed-btn-row" style="display: flex; justify-content: center; align-items: center; margin-bottom: 32px;">
+        <a href="<?php echo esc_url(admin_url('admin.php?page=' . $main_menu_slug . '-edit')); ?>"
+           class="mdc-button mdc-button--raised mdc-button--primary add-feed-btn"
+           style="font-size: 1.1rem; letter-spacing: 0.02em; padding: 0 28px; height: 44px;">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__label">
+                <?php echo esc_html__('Add New Feed', WORDPLUG_CF_TEXT_DOMAIN); ?>
+            </span>
+        </a>
+    </div>
 
     <!-- MDC Data Table -->
     <div id="feed-list-table-container" class="mdc-data-table" style="margin-top: 20px;">
